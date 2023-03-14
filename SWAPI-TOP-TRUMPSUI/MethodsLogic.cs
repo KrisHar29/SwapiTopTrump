@@ -44,13 +44,13 @@ namespace SWAPI_TOP_TRUMPSUI
             if (listCount - 1 == index)
             {
                 double output = 0;
-                Console.WriteLine($"You have no chance of winning with {propertyValue} of {itemValue}.");
+                //Console.WriteLine($"You have no chance of winning with {propertyValue} of {itemValue}.");
                 return output;
             }
             else
             {
-                double output = ((listCount - 1) - index) / (listCount - 1) * 100;
-                Console.WriteLine($"You have test2 {output}% of winning with {propertyValue} of {itemValue}.");
+                double output = (listCount - 1) / (listCount - 1) * 100;
+                //Console.WriteLine($"You have test2 {output}% of winning with {propertyValue} of {itemValue}.");
                 return output;
             }
         }
