@@ -44,7 +44,7 @@ namespace SWAPI_TOP_TRUMPSUI
             double itemValueDouble = Convert.ToDouble(itemValue);
             int index = createList.IndexOf(itemValueDouble);
             double listCount = createList.Count;
-            if (listCount == index)
+            if (listCount -1 == index)
             {
                 double output = 0;
                 //Console.WriteLine($"You have no chance of winning with {propertyValue} of {itemValue}.");
