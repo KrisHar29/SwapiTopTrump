@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SWAPI_TOP_TRUMPSUI.Models
+﻿namespace SWAPI_TOP_TRUMPSUI.Models
 {
     public class PersonModelLinq
     {

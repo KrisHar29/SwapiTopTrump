@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text.Json;
-using Microsoft.VisualBasic;
-using SWAPI_TOP_TRUMPSUI;
-using SWAPI_TOP_TRUMPSUI.Models;
+﻿using SWAPI_TOP_TRUMPSUI;
 
 
 // Trying to make a Top Trumps app using information from SWAPI.dev

@@ -23,11 +23,14 @@ namespace SWAPI_TOP_TRUMPSUI
             return output;
         }
 
-        public static double CalculateWin(List<PersonModelLinq> itemList, string itemValue, string propertyValue)
+        public static double CalculateWin(List<PersonModelLinq> allCards, string itemValue, string propertyValue)
         {
             // get all heights from list sorted desc
-            var createList = (from item in itemList
-                              select double.Parse(item.GetType().GetProperty(propertyValue).GetValue(item).ToString()))
+
+            // ammending out below to make the win%  based on opponents hand only and not win% on what was the players hand only
+
+            var createList = (from card in allCards
+                              select double.Parse(card.GetType().GetProperty(propertyValue).GetValue(card).ToString()))
                               .OrderByDescending(h => h)
                               .ToList();
 
@@ -41,7 +44,7 @@ namespace SWAPI_TOP_TRUMPSUI
             double itemValueDouble = Convert.ToDouble(itemValue);
             int index = createList.IndexOf(itemValueDouble);
             double listCount = createList.Count;
-            if (listCount - 1 == index)
+            if (listCount == index)
             {
                 double output = 0;
                 //Console.WriteLine($"You have no chance of winning with {propertyValue} of {itemValue}.");
@@ -49,7 +52,9 @@ namespace SWAPI_TOP_TRUMPSUI
             }
             else
             {
-                double output = (listCount - 1) / (listCount - 1) * 100;
+                // corrected method here to be listcount - index as apposed to listcount - 1 / listcount -1 which of
+                // course returned 100%  when it should not
+                double output = (listCount - index) / (listCount) * 100;
                 //Console.WriteLine($"You have test2 {output}% of winning with {propertyValue} of {itemValue}.");
                 return output;
             }
