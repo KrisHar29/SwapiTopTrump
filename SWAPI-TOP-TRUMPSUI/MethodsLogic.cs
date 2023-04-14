@@ -109,7 +109,7 @@ namespace SWAPI_TOP_TRUMPSUI
                 int userAttribute = AskComputerForCardSelection();
                 userTurn = CalculateRoundWinner(player, computer, userAttribute, userTurn);
 
-                if (player.CardCount() == 0 || computer.CardCount() == 0)
+                if (player.PlayerCards.Count == 0 || computer.PlayerCards.Count == 0)
                 {
                     HandShuffle(player, computer);
                 }
