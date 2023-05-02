@@ -4,10 +4,10 @@ namespace SWAPIels
 {
     public class PlayerModel
     {
-        public List<PersonModelLinq> PlayerCards { get; set; }
-        public List<PersonModelLinq> PlayerWonCards { get; set; }
+        public List<PersonModelLinq>? PlayerCards { get; set; }
+        public List<PersonModelLinq>? PlayerWonCards { get; set; }
         public List<PersonModelLinq>? PlayerCardsToShuffle { get; set; }
-        public List<PersonModelLinq> AllCards { get; set; }
+        public List<PersonModelLinq>? AllCards { get; set; }
         public int CardCount()
         {
             if (PlayerCards.Count == 0 && PlayerWonCards.Count == 0) { return 0; }

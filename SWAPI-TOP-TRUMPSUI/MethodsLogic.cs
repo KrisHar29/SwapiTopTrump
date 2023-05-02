@@ -2,6 +2,7 @@
 using SWAPIels;
 using System;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SWAPI_TOP_TRUMPSUI
 {
@@ -317,7 +318,28 @@ namespace SWAPI_TOP_TRUMPSUI
         }
         public static List<PersonModelLinq> Shuffle()
         {
-            List<PersonModelLinq> cardList = PeopleRepository.GetAll();
+            // using hard coded values
+            //List<PersonModelLinq> cardList = PeopleRepository.GetAll();
+
+            List<PersonModelLinq> cardList = new();
+
+            // using existing data set that i just verified downloaded from API
+            var jsonString = File.ReadAllText("requestedpeople.json");
+            var people = JsonSerializer.Deserialize<PersonModelLinq[]>(jsonString);
+            foreach (PersonModelLinq person in people)
+            {
+                if (person.Height == "unknown")
+                {
+                    person.Height = "0";
+                }
+                if (person.Mass == "unknown")
+                {
+                    person.Mass = "0";
+                }
+                cardList.Add(person);
+            }
+            
+
             var gameList = (from c in cardList select c).ToList();
             List<PersonModelLinq> shuffledCards = cardList.OrderBy(x => Guid.NewGuid()).ToList();
             return shuffledCards;

@@ -5,16 +5,22 @@ using SWAPIels;
 // Trying to make a Top Trumps app using information from SWAPI.dev
 // WORK IN PROGRESS
 
+
+//RequestSWAPIToFile request = new RequestSWAPIToFile();
+//await request.RequestAllPeople();
+
+
+
 ConsoleUI.StartUpUI();
 Console.ReadLine();
 
-try
-{
-    ConsoleUI.StartUpUI();
-    Console.ReadLine();
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"  is out of range.");
-    Console.WriteLine( ex.Message );
-}
+//try
+//{
+//    ConsoleUI.StartUpUI();
+//    Console.ReadLine();
+//}
+//catch (Exception ex)
+//{
+//    Console.WriteLine($"  is out of range.");
+//    Console.WriteLine( ex.Message );
+//}
