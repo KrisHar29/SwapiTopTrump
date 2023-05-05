@@ -9,7 +9,7 @@ namespace SWAPI_TOP_TRUMPSUI
     public class RequestSWAPIToFile
     {
         private static readonly HttpClient client = new HttpClient();
-
+        //test method
         public async Task Main()
         {
             string url = "https://swapi.dev/api/people/1";
@@ -32,7 +32,8 @@ namespace SWAPI_TOP_TRUMPSUI
                 Console.WriteLine($"Error: {response.StatusCode}");
             }
         }
-
+        // iterates through api 83 times (17 is broken link) to download all 82
+        // people from swapi.dev
         public async Task RequestAllPeople()
         {
             string requestedPeople = "[ ";
@@ -42,11 +43,16 @@ namespace SWAPI_TOP_TRUMPSUI
                 string url = $"https://swapi.dev/api/people/{i}";
                 HttpResponseMessage response = await client.GetAsync(url);
                 Requesting(i);
+                if (i % 10 == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("=== Requesting Data ===");
+                }
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
 
-                    //Add data to requested people
+                    //Add data to playercarddata
                     if ( i == 83)
                     {
                         requestedPeople += responseBody + "]";
@@ -64,7 +70,7 @@ namespace SWAPI_TOP_TRUMPSUI
 
             if (requestedPeople != "[ ")
             {
-                File.WriteAllText("requestedpeople.json", requestedPeople);
+                File.WriteAllText("playercarddata.json", requestedPeople);
             }
         }
 

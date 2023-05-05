@@ -1,13 +1,11 @@
 ﻿using SWAPI_TOP_TRUMPSUI;
-using SWAPIels;
 
 
 // Trying to make a Top Trumps app using information from SWAPI.dev
 // WORK IN PROGRESS
 
 
-//RequestSWAPIToFile request = new RequestSWAPIToFile();
-//await request.RequestAllPeople();
+
 
 
 
