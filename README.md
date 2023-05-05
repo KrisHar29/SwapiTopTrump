@@ -1,6 +1,18 @@
 # SwapiTopTrump
 
 Making a console app (so far) to use data from SWAPI.dev to play Top Trumps.
+
+
+===05/05===
+
+Removed references to PlayerModelLinq => PlayerModel
+Set up menu item for calling API to store card details on machine and delete any exisiting data at the time. Happy with UI displayed on console for this method.
+
+Updated Computer logic to randomly select options 1-4 instead of 1-2
+
+Game Logic is still not fixed with regards to all the 0 values.
+
+
 ===02/05=== 
 
 PersonModel and Linq updated to reflect data annotation for json read…
