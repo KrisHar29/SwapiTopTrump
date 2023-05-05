@@ -1,24 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SWAPI_TOP_TRUMPSUI.Models
 {
     public class PersonModel
     {
-        public string name { get; set; }
-        public string height { get; set; }
-        public string mass { get; set; }
-        public string hair_color { get; set; }
-        public string skin_color { get; set; }
-        public string eye_color { get; set; }
-        public string birth_year { get; set; }
-        public string gender { get; set; }
-        public string homeworld { get; set; }
-        public string[] films { get; set; }
-        public string[] species { get; set; }
-        public string[] vehicles { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("height")]
+        public string? Height { get; set; }
+
+        [JsonPropertyName("mass")]
+        public string? Mass { get; set; }
+
+        [JsonPropertyName("hair_color")]
+        public string? HairColor { get; set; }
+
+        [JsonPropertyName("skin_color")]
+        public string? SkinColor { get; set; }
+
+        [JsonPropertyName("eye_color")]
+        public string? EyeColor { get; set; }
+
+        [JsonPropertyName("birth_year")]
+        public string? BirthYear { get; set; }
+
+        [JsonPropertyName("gender")]
+        public string? Gender { get; set; }
+
+        [JsonPropertyName("homeworld")]
+        public string? Homeworld { get; set; }
+
+        [JsonPropertyName("films")]
+        public string[]? Films { get; set; }
+
+        [JsonPropertyName("species")]
+        public string[]? Species { get; set; }
+
+        [JsonPropertyName("vehicles")]
+        public string[]? Vehicles { get; set; }
     }
 }

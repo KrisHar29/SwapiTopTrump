@@ -1,13 +1,11 @@
-﻿using SWAPI_TOP_TRUMPSUI.Models;
-
-namespace SWAPIels
+﻿namespace SWAPI_TOP_TRUMPSUI.Models
 {
     public class PlayerModel
     {
-        public List<PersonModelLinq> PlayerCards { get; set; }
-        public List<PersonModelLinq> PlayerWonCards { get; set; }
-        public List<PersonModelLinq>? PlayerCardsToShuffle { get; set; }
-        public List<PersonModelLinq> AllCards { get; set; }
+        public List<PersonModel>? PlayerCards { get; set; }
+        public List<PersonModel>? PlayerWonCards { get; set; }
+        public List<PersonModel>? PlayerCardsToShuffle { get; set; }
+        public List<PersonModel>? AllCards { get; set; }
         public int CardCount()
         {
             if (PlayerCards.Count == 0 && PlayerWonCards.Count == 0) { return 0; }
@@ -16,7 +14,7 @@ namespace SWAPIels
         }
         public void Shuffle()
         {
-            List<PersonModelLinq> allCards = new List<PersonModelLinq>();
+            List<PersonModel> allCards = new List<PersonModel>();
             allCards.AddRange(PlayerCards);
             allCards.AddRange(PlayerWonCards);
 
@@ -26,7 +24,7 @@ namespace SWAPIels
             {
                 n--;
                 int k = rng.Next(n + 1);
-                PersonModelLinq card = allCards[k];
+                PersonModel card = allCards[k];
                 allCards[k] = allCards[n];
                 allCards[n] = card;
             }

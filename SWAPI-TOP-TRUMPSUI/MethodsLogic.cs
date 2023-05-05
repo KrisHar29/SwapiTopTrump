@@ -1,28 +1,32 @@
 ﻿using SWAPI_TOP_TRUMPSUI.Models;
-using SWAPIels;
-using System;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SWAPI_TOP_TRUMPSUI
 {
     public class MethodsLogic
     {
-        // CalculateWinheight not used but keeping as ref
-        public static double CalculateWinHeight(List<PersonModelLinq> itemList, string itemValue)
+        public async Task DownloadDataFromApi()
         {
-            // get all heights from list sorted desc
-            var createList = (from item in itemList select item.Height).OrderByDescending(h => h).ToList();
-            // calculate win% based on number of items v itemValue
-            // list.length - [i]/list.length = %
-            // find [i] from itemValue
-            int index = createList.IndexOf(itemValue);
-            double listCount = createList.Count;
-            Console.WriteLine(listCount);
-            double output = (listCount - index) / listCount * 100;
-            return output;
+            RequestSWAPIToFile request = new RequestSWAPIToFile();
+            await request.RequestAllPeople();
         }
+        // CalculateWinheight not used but keeping as ref
+        //public static double CalculateWinHeight(List<PersonModel> itemList, string itemValue)
+        //{
+        //    // get all heights from list sorted desc
+        //    var createList = (from item in itemList select item.Height).OrderByDescending(h => h).ToList();
+        //    // calculate win% based on number of items v itemValue
+        //    // list.length - [i]/list.length = %
+        //    // find [i] from itemValue
+        //    int index = createList.IndexOf(itemValue);
+        //    double listCount = createList.Count;
+        //    Console.WriteLine(listCount);
+        //    double output = (listCount - index) / listCount * 100;
+        //    return output;
+        //}
         // when passing through a string 'int'
-        public static double CalculateWin(List<PersonModelLinq> allCards, string itemValue, string propertyValue)
+        public static double CalculateWin(List<PersonModel> allCards, string itemValue, string propertyValue)
         {
             // get all heights from list sorted desc
 
@@ -49,7 +53,7 @@ namespace SWAPI_TOP_TRUMPSUI
             }
         }
         // when passing through a 'int' for array size
-        public static double CalculateWin(List<PersonModelLinq> allCards, int itemValue, string propertyValue)
+        public static double CalculateWin(List<PersonModel> allCards, int itemValue, string propertyValue)
         {
             // win based on array size of film / vehicles
 
@@ -127,7 +131,7 @@ namespace SWAPI_TOP_TRUMPSUI
         public static int AskComputerForCardSelection()
         {
             Random random = new();
-            int randomNumber = random.Next(1, 2);
+            int randomNumber = random.Next(1, 4);
             Console.WriteLine($"Computer selects {randomNumber}");
             return randomNumber;
         }
@@ -201,7 +205,7 @@ namespace SWAPI_TOP_TRUMPSUI
         }
         public static bool AssignCardsAttribute(PlayerModel player, PlayerModel computer, string attribute, bool userTurn)
         {
-            PropertyInfo propInfo = typeof(PersonModelLinq).GetProperty(attribute);
+            PropertyInfo propInfo = typeof(PersonModel).GetProperty(attribute);
             if (attribute == "Films" || attribute == "Vehicles")
             {
                 object playerValue = propInfo.GetValue(player.PlayerCards[0]);
@@ -255,7 +259,7 @@ namespace SWAPI_TOP_TRUMPSUI
                 }
             }            
         }
-        public static void CardWinAll(List<PersonModelLinq> itemList, List<PersonModelLinq> shuffleAllCards)
+        public static void CardWinAll(List<PersonModel> itemList, List<PersonModel> shuffleAllCards)
         {
             // based on index position of card call calculatewin() to display value + win%
 
@@ -267,9 +271,11 @@ namespace SWAPI_TOP_TRUMPSUI
                 $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Height, "Height")}");
             Console.WriteLine($"2 Mass:  {itemList[0].Mass}\tWin%: " +
                 $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Mass, "Mass")}");
-            Console.WriteLine($"3 Films:  {itemList[0].Films?.Length ?? 0}\t Win%: " + $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Films?.Length ?? 0, "Films")}");
+            Console.WriteLine($"3 Films:  {itemList[0].Films?.Length ?? 0}\t " +
+                $"Win%: " + $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Films?.Length ?? 0, "Films")}");
 
-            Console.WriteLine($"4 Vehicles:  {itemList[0].Vehicles?.Length ?? 0}\t Win%: " + $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Vehicles?.Length ?? 0, "Vehicles")}");
+            Console.WriteLine($"4 Vehicles:  {itemList[0].Vehicles?.Length ?? 0}\t " +
+                $"Win%: " + $"{MethodsLogic.CalculateWin(shuffleAllCards, itemList[0].Vehicles?.Length ?? 0, "Vehicles")}");
         }
         public static void GameWin(int? playerTotalCard, int? computerTotalCard)
         {
@@ -291,16 +297,16 @@ namespace SWAPI_TOP_TRUMPSUI
                 Console.Clear();
             }
         }
-        public static (List<PersonModelLinq> computerCards, List<PersonModelLinq> playerCards) CreatePlayerHands(List<PersonModelLinq> shuffledCardList)
+        public static (List<PersonModel> computerCards, List<PersonModel> playerCards) CreatePlayerHands(List<PersonModel> shuffledCardList)
         {
             //splitting already shuffled list into computer and user
 
-            List<PersonModelLinq> computerCards = new();
-            List<PersonModelLinq> playerCards = new();
+            List<PersonModel> computerCards = new();
+            List<PersonModel> playerCards = new();
 
             // Splitting the shuffled card list into computer and player hands
             bool isComputerTurn = true; // start with computer
-            foreach (PersonModelLinq card in shuffledCardList)
+            foreach (PersonModel card in shuffledCardList)
             {
                 if (isComputerTurn)
                 {
@@ -315,11 +321,34 @@ namespace SWAPI_TOP_TRUMPSUI
             }
             return (computerCards, playerCards);
         }
-        public static List<PersonModelLinq> Shuffle()
+
+        //does the initial shuffling method now taking data from the playercarddata.json
+        public static List<PersonModel> Shuffle()
         {
-            List<PersonModelLinq> cardList = PeopleRepository.GetAll();
+            // using hard coded values
+            //List<PersonModelLinq> cardList = PeopleRepository.GetAll();
+
+            List<PersonModel> cardList = new();
+
+            // using existing data set that i just verified downloaded from API
+            var jsonString = File.ReadAllText("playercarddata.json");
+            var people = JsonSerializer.Deserialize<PersonModel[]>(jsonString);
+            foreach (PersonModel person in people)
+            {
+                if (person.Height == "unknown")
+                {
+                    person.Height = "0";
+                }
+                if (person.Mass == "unknown")
+                {
+                    person.Mass = "0";
+                }
+                cardList.Add(person);
+            }
+            
+
             var gameList = (from c in cardList select c).ToList();
-            List<PersonModelLinq> shuffledCards = cardList.OrderBy(x => Guid.NewGuid()).ToList();
+            List<PersonModel> shuffledCards = cardList.OrderBy(x => Guid.NewGuid()).ToList();
             return shuffledCards;
         }
     }
