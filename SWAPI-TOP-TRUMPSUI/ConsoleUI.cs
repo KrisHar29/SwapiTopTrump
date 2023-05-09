@@ -6,7 +6,7 @@ namespace SWAPI_TOP_TRUMPSUI
 {
     public class ConsoleUI
     {
-        public static void Welcome() 
+        public static void Welcome()
         {
             Console.WriteLine("Welcome to SWAPI.dev TOP TRUMPS");
             Console.WriteLine("created by KrisHar29");
@@ -22,14 +22,13 @@ namespace SWAPI_TOP_TRUMPSUI
                 int userOption;
                 userOption = AskUserOptionMainMenu(menuItem, true);
 
-                switch(userOption)
+                switch (userOption)
                 {
                     case 1:
-                        StartGame(cheatMode); 
+                        StartGame(cheatMode);
                         break;
                     case 2:
-                        bool cheatModeChange = ChooseCheatMode();
-                        cheatMode = cheatModeChange;
+                        cheatMode = ChooseCheatMode();
                         break;
                     case 3:
                         PrintRules();
@@ -41,29 +40,12 @@ namespace SWAPI_TOP_TRUMPSUI
                         continueApp = false;
                         break;
                     case 6:
-                        Task task = DownloadDataMenu();
-                        await task;
+                        await DownloadDataMenu();
                         break;
                     default:
                         break;
 
                 }
-
-                //if (userOption == 1)
-                //{
-                //    StartGame(cheatMode);
-                //}
-                //if (userOption == 2)
-                //{
-                //    bool cheatModeChange = ChooseCheatMode();
-                //    cheatMode = cheatModeChange;
-                //}
-                //if (userOption == 3)
-                //{
-                //    PrintRules();
-                //}
-                //if (userOption == 4) { continueApp = false; }
-                //if (userOption == 5) { continueApp = false; }
             }
         }
         //menu for selecting options to download card data to play
@@ -85,8 +67,7 @@ namespace SWAPI_TOP_TRUMPSUI
                     File.Delete("playercarddata.json");
                     MethodsLogic logic = new MethodsLogic();
                     Console.WriteLine("=== Requesting Data ===");
-                    Task task = logic.DownloadDataFromApi();
-                    await task;
+                    await logic.DownloadDataFromApi();
                     break;
                 case 2:
                     try
@@ -98,7 +79,7 @@ namespace SWAPI_TOP_TRUMPSUI
                         Console.Clear();
                         break;
                     }
-                    catch (System.IO.FileNotFoundException )
+                    catch (System.IO.FileNotFoundException)
                     {
                         Console.WriteLine("No File Found");
                         Console.ReadLine();
@@ -111,40 +92,59 @@ namespace SWAPI_TOP_TRUMPSUI
                 default:
                     break;
             }
-            
+
         }
 
         public static void StartGame(bool cheatMode)
         {
-            bool gameContinue = true;
-            bool userTurn = true;
-            PlayerModel player = new();
-            PlayerModel computer = new();
-            player.PlayerWonCards = new();
-            computer.PlayerWonCards = new();
-            List<PersonModel> shuffleAllCards = MethodsLogic.Shuffle();
-            player.AllCards = shuffleAllCards;
+            bool cardDataAvailable = true;
 
-            (computer.PlayerCards, player.PlayerCards) = MethodsLogic.CreatePlayerHands(shuffleAllCards);
-
-            while (player.CardCount() != 0 && computer.CardCount() != 0)
+            //checking if there is downloaded data available
+            // if not while loop will not run ad the new precodition
+            //if statement will not start.
+            if (!File.Exists("playercarddata.json"))
             {
-                while (gameContinue)
-                {
-                    userTurn = MethodsLogic.TakeTurn(player, computer, userTurn, cheatMode);
-                    gameContinue = MethodsLogic.GameContinue(player, computer);
-                }
-                //while (!userTurn && gameContinue)
-                //{
-                //    userTurn = TakeTurn(playerCards, playerWonCards, computerCards, computerWonCards, userTurn, cheatMode);
-                //    gameContinue = GameContinue(playerCards, computerCards);
-                //}
-                MethodsLogic.GameWin(player.CardCount(), computer.CardCount());
-                break;
-            }
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You have not downloaded any data to\n" +
+                                    "play yet! Please select option 6 of\n" +
+                                    "the menu. Press any key to continue.");
+                Console.ResetColor();
+                Console.ReadLine();
+                Console.Clear();
 
-            //GameWin(TotalCardForPlayer(playerCards, playerWonCards), TotalCardForPlayer(computerCards, computerWonCards));
+                cardDataAvailable = false;
+
+            }
+            
+            // added the if statement to bypass logic if no card data available
+            if(cardDataAvailable)
+            {
+                bool gameContinue = true;
+                bool userTurn = true;
+                PlayerModel player = new();
+                PlayerModel computer = new();
+                player.PlayerWonCards = new();
+                computer.PlayerWonCards = new();
+                List<PersonModel> shuffleAllCards = MethodsLogic.Shuffle();
+                player.AllCards = shuffleAllCards;
+
+                (computer.PlayerCards, player.PlayerCards) = MethodsLogic.CreatePlayerHands(shuffleAllCards);
+
+                while (player.CardCount() != 0 && computer.CardCount() != 0)
+                {
+                    while (gameContinue)
+                    {
+                        userTurn = MethodsLogic.TakeTurn(player, computer, userTurn, cheatMode);
+                        gameContinue = MethodsLogic.GameContinue(player, computer);
+                    }
+
+                    MethodsLogic.GameWin(player.CardCount(), computer.CardCount());
+                    break;
+                }
+            }
         }
+
         //asks for line selection
         public static void PrintAskForCardSelection()
         {
@@ -162,17 +162,18 @@ namespace SWAPI_TOP_TRUMPSUI
             {
                 CardValues(player.PlayerCards);
             }
-            
+
         }
         //prints card values for first card
         public static void CardValues(List<PersonModel> itemList)
         {
-                //print all values
-                Console.WriteLine($"  Name:   {itemList[0].Name}");
-                Console.WriteLine($"1 Height: {itemList[0].Height}");
-                Console.WriteLine($"2 Mass:   {itemList[0].Mass}");
-                Console.WriteLine($"3 Films:  {itemList[0].Films?.Length ?? 0}");
-                Console.WriteLine($"4 Vehicles:  {itemList[0].Vehicles?.Length ?? 0}");
+            //print all values
+            Console.WriteLine($"  Name:   {itemList[0].Name}");
+            Console.WriteLine($"1 Height: {itemList[0].Height}");
+            Console.WriteLine($"2 Mass:   {itemList[0].Mass}");
+            Console.WriteLine($"3 Films:  {itemList[0].Films?.Length ?? 0}");
+            Console.WriteLine($"4 Vehicles:  {itemList[0].Vehicles?.Length ?? 0}");
+            Console.WriteLine($"5 Age:  {itemList[0].BirthYear?.Length ?? 0}")
         }
         //cheat menu selection
         public static bool ChooseCheatMode()
@@ -187,9 +188,9 @@ namespace SWAPI_TOP_TRUMPSUI
             int userOptionCheatMode = AskUserOptionMainMenu(menuItems, false);
             Console.Clear();
             if (userOptionCheatMode == 1) { return false; }
-            if (userOptionCheatMode == 2) { return true; }
-            else { return false; }
-            
+            //if (userOptionCheatMode == 2) { return true; }
+            else { return true; }
+
 
         }
         //prints games rules
@@ -202,7 +203,7 @@ namespace SWAPI_TOP_TRUMPSUI
             Console.ReadLine();
             Console.Clear();
         }
-        //try parses to int32 user option on menu items for relevent switch/if statements
+        //try parses to int user option on menu items for relevent switch/if statements
         public static int AskUserOptionMainMenu(int menuOptions, bool mainMenu)
         {
             if (mainMenu == true) { MainMenu(); }
@@ -216,14 +217,14 @@ namespace SWAPI_TOP_TRUMPSUI
             catch (Exception ex)
             {
                 Console.Clear();
-                Console.ForegroundColor= ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("========================");
                 Console.WriteLine("Invalid input try again!");
                 Console.WriteLine("========================");
                 Console.ResetColor();
                 return 0;
             }
-            
+
         }
         //prints main menu
         public static void MainMenu()

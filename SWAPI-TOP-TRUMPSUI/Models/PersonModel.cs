@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace SWAPI_TOP_TRUMPSUI.Models
 {
+
+    //Can clearly not use certain information eg;
+    // hair color, skin color, eye color, species, homeworld
+
     public class PersonModel
     {
         [JsonPropertyName("name")]

@@ -166,6 +166,9 @@ namespace SWAPI_TOP_TRUMPSUI
                 case 4:
                     attribute = "Vehicles";
                     break;
+                case 5:
+                    attribute = "BirthYear";
+                    break;
                 default:
                     // Handle invalid user input
                     break;
@@ -325,14 +328,13 @@ namespace SWAPI_TOP_TRUMPSUI
         //does the initial shuffling method now taking data from the playercarddata.json
         public static List<PersonModel> Shuffle()
         {
-            // using hard coded values
-            //List<PersonModelLinq> cardList = PeopleRepository.GetAll();
-
             List<PersonModel> cardList = new();
 
             // using existing data set that i just verified downloaded from API
             var jsonString = File.ReadAllText("playercarddata.json");
             var people = JsonSerializer.Deserialize<PersonModel[]>(jsonString);
+            
+            //clean data in memory so that height and mass are parseable
             foreach (PersonModel person in people)
             {
                 if (person.Height == "unknown")

@@ -5,10 +5,6 @@
 // WORK IN PROGRESS
 
 
-
-
-
-
 ConsoleUI.StartUpUI();
 Console.ReadLine();
 
